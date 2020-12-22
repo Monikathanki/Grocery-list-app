@@ -27,7 +27,7 @@ class ListForm extends Component {
   }
   handleSubmit = (e) => {
     e.preventDefault();
-    const {name, note, category, price, weight} = this.state
+    const {name, note, selCategory: category, price, weight} = this.state
     const newLists = {name, note, category, price, weight}
     console.log(newLists)
     let checked = false;
@@ -59,14 +59,12 @@ class ListForm extends Component {
     let category_Id = Number(e.target.value);
     let categories = this.context.categories.find((c) => c.id === category_Id);
     this.setState({
-      selCategory: categories,
+      selCategory: e.target.value,
       category_Id: category_Id
     });
   };
   render() {
-    console.log(this.context);
     let  categories  = this.context;
-    console.log(categories);
      //let nameError = this.validateList();
     return (
       <div className="add-list">
@@ -78,7 +76,7 @@ class ListForm extends Component {
               type="text"
               name="name" className="add-name-input"
               value={this.state.name}
-              onChange={this.updateList}
+              onChange={this.handleChange}
             />
             {/* {this.state.list.touched && (
               <ValidationError message={nameError} />

@@ -48,7 +48,7 @@ class List extends React.Component {
                                 <input className="checkmark"
                                 type="checkbox"
                                 checked={list.checked ? true : false}
-                                onClick={() => this.context.toggleComplate(list.id)}
+                                onClick={() => this.context.toggleComplete(list.id)}
                                  />{" "}
                                  Completed?
                             </p>

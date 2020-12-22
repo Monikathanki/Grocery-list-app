@@ -26,24 +26,23 @@ class App extends React.Component {
       userName: "",
       user_id: "",
     },
-   
-
-    
-    toggleComplete: (id) => {
-      this.setState({
-        lists: this.state.lists.map((list) => {
-          if (list.id === id) {
-            list.checked = !list.checked;
-            let checked = list.checked;
-            let listChecked = { id, checked };
-          }
-          return list;
-         })
-        
-        })
-      }
-
   };
+
+  toggleComplete = (id) => {
+    this.setState({
+      lists: this.state.lists.map((list) => {
+        console.log(list)
+        if (Number(list.id) == Number(id)) {
+          console.log("match")
+          list.checked = !list.checked;
+          let checked = list.checked;
+          let listChecked = { id, checked };
+        }
+        return list;
+       })
+      
+      })
+    }
 
   handleLogout = () => {
 
@@ -62,20 +61,19 @@ class App extends React.Component {
   }
   /* unable to create new list */
 
-
   // the object passed here from ListForm
   // is {category, id, name, note, price, weight}
   // you can remove a lot 
   createList = (list) => {
     this.setState({
-      lists: [...this.state.lists, list],
+      lists: [...this.state.lists, {id: this.state.lists.length, ...list}],
     });
     
   }
   /* unable to delete list */
 
   deleteList = (listid) => {
-    let newLists =this.state.lists.filter((lid) => lid.id !== listid);
+    let newLists = this.state.lists.filter((lid) => lid.id !== listid);
       this.setState({
         lists: newLists
     })
@@ -102,7 +100,7 @@ class App extends React.Component {
          setUser: this.state.setUser,
          setCategories: this.setCategories,
          handleLogout: this.handleLogout,
-         toggleComplete: this.state.toggleComplete,
+         toggleComplete: this.toggleComplete,
          createList: this.createList,
          deleteList: this.deleteList,
           updateList: this.updateList,
