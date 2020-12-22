@@ -62,18 +62,13 @@ class App extends React.Component {
   }
   /* unable to create new list */
 
-  createList = (event) => {
-    let lists = event.target.lists.value;
-      // name: event.target.value,
-      // note: event.target.value,
-      // price: event.target.value,
-      // weight: event.target.value,
-      // category: event.target.value,
-    
-    let newLists = event.target.lists;
-    newLists.push(lists)
+
+  // the object passed here from ListForm
+  // is {category, id, name, note, price, weight}
+  // you can remove a lot 
+  createList = (list) => {
     this.setState({
-      lists: [...this.state.lists, newLists],
+      lists: [...this.state.lists, list],
     });
     
   }
