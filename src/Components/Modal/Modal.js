@@ -7,6 +7,7 @@ import Context from "../../Context/Context";
 
 function Modal(props) {
     let context = useContext(Context);
+    
 
 
    // deleteList =(listid)  => {
@@ -17,7 +18,9 @@ function Modal(props) {
        ? "modal display-block" 
        : "modal display-none";
 
-       let list = context.lists.find((list) => list.id === Number(props.match.params.id)) || {};
+       let list = context.lists.find((list) => Number(list.id) === Number(props.match.params.id)) || {};
+
+       // this may need a [state, setState] = useState(list)
 
     return (
         <div className={showHideClassName}>
@@ -25,7 +28,7 @@ function Modal(props) {
                 <h2>
                     {list.name}
                 </h2>
-                <h3 className="view-list-category">category: {list.category}</h3>
+                <h3 className="view-list-category">Category: {list.category}</h3>
                 <div className="list-textbox">
                 <p>{list.note}</p>
                 </div>
@@ -50,7 +53,8 @@ function Modal(props) {
                         className="checkmark"
                         type="checkbox"
                         checked={list.checked ? true : false}
-                        onClick={() => context.toggleComplete(list.listChecked)}
+                        // needs to send id 
+                        onChange={() => context.toggleComplete(list.id)}
                          /> {" "}
                          Completed?
                     </p>
