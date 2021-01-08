@@ -1,7 +1,7 @@
 import React from "react";
 import Context from "../../Context/Context";
 import {Link} from "react-router-dom"
-import "./CategoriesPage.css";
+
 
 
 class CategoriesPage extends React.Component {

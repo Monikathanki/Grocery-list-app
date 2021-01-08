@@ -1,7 +1,7 @@
 import React from "react";
 import Context from "../../Context/Context";
-
-
+import Config from "../../Config/Config";
+import TokenService from "../../services/token-service";
 
 class EditList extends React.Component {
     static contextType = Context;
@@ -12,163 +12,123 @@ class EditList extends React.Component {
         note: "",
         price: "",
         weight: "",
-        category: "",
-        checked: "",
-        category_id: "",
-        start_date: "",
-
     };
+
+     componentDidMount() {
+         let { id, name, note, price, weight, checked } = this.context.lists.filter(
+             (list) => {
+                 return list.id === parseInt(this.props.match.params.id);
+             }
+         );
+         this.setState({ id, name, note, price, weight, checked });
+     }
 
     handleSubmit = (e) => {
         e.preventDefault();
-        let {
-            id,
-            name,
-            note,
-            price,
-            weight,
-            category,
-            checked,
-            category_id,
-            start_date
-             
-
-            
-            
-
-        } = this.state;
+        let { id, name, note, price, weight, checked } = this.state;
         let newList = {
             id,
             name,
             note,
             price,
             weight,
-            category,
             checked,
-            category_id,
-            start_date
-             
-            
-        }
-        this.resetFields();
-        this.context.updateList(newList);
-        this.props.history.push(`/grocery-lists/${this.props.match.params.id}`)
-         this.setState({newList})
-    }
+        };
+
+        fetch(`${Config.API_ENDPOINT}/lists/${this.props.match.params.id}`, {
+            method: "PATCH",
+            body: JSON.stringify(newList),
+            headers: {
+                "content-type": "application/json",
+                Authorization: `Bearer ${TokenService.getAuthToken()}`,
+            },
+        })
+            .then((res) => {
+                if (!res.ok) {
+                    return res.json().then((error) => Promise.reject(error));
+                }
+                return res.json();
+            })
+            .then((updatedList) => {
+                this.context.updateList(updatedList[0]);
+                this.props.history.push(`/grocery-lists/${this.props.match.params.id}`);
+            });
+    };
 
     resetFields = () => {
-        this.setState ({
+        this.setState({
             id: "",
             name: "",
             note: "",
             price: "",
             weight: "",
             category: "",
-             
-            
-        })
-    }
-    handleUpdateName = (e) => {
-        this.setState({
-            name: e.target.value,
-
         });
-    }
-
-    handleUpdateNote = (e) => {
+    };
+    handleChange = (e) => {
         this.setState({
-            note: e.target.value,
-        })
-    }
+            [e.target.name]: e.target.value,
+        });
+    };
 
-    handleUpdatePrice = (e) => {
-        this.setState({
-            price: e.target.value,
-        })
-    }
-    handleUpdateWeight = (e) => {
-        this.setState({
-            weight: e.target.value
-        })
-    }
-
-    handleClickCancel = (e) => {
+    handleClickCancel = () => {
         this.props.history.push(`/grocery-lists/${this.props.match.params.id}`);
-    }
+    };
 
     render() {
-        let {name, note, price, weight} = this.state;
-        return(
+        let { name, note, price, weight } = this.state;
+        return (
             <div className="edit-lists">
-                <form onSubmit ={(e) => this.handleSubmit(e.target.value)} clasName="edit-form">
+                <form onSubmit={this.handleSubmit} className="edit-form">
                     <h2>Edit List</h2>
                     <div className="edit-section">
-                        <label className="edit-list-label">Name: 
-
-                        </label>
-                        <input  
-                        onChange={(e) => this.handleUpdateName(e)}
+                        <label className="edit-list-label">Name:</label>
+                        <input
+                            onChange={this.handleChange}
                             className="edit-list-input"
-                        value={name}
-                        name = "name"
-                        type="text"
+                            value={name}
+                            name="name"
+                            type="text"
                         />
-                        <label className="edit-list-label">Note:
-
-                        </label>
-                        <input  
-                           onChange={(e) => this.handleUpdateNote(e)}
-
-                           className="edit-note-input"
+                        <label className="edit-list-label">Note:</label>
+                        <input
+                            onChange={this.handleChange}
+                            className="edit-note-input"
                             type="text"
                             value={note}
-                           name="note"
+                            name="note"
                         />
-                        <label className="edit-list-label"
-                        
-                        >
-                            Price:
-
-                        </label>
-                        <input  
-                           onChange={(e) => this.handleUpdatePrice(e)}
-                           className="edit-price-input"
-                            type="text"
+                        <label className="edit-list-label">Price:</label>
+                        <input
+                            onChange={this.handleChange}
+                            className="edit-price-input"
+                            type="number"
                             value={price}
-                           name="price"
+                            name="price"
                         />
-                        <label 
-                           className="edit-list-input"
-                        >
-                            Weight:
-
-                        </label>
-                        <input  
-                            onChange={(e) => this.handleUpdateWeight(e)}
-                           className="edit-weight-input"
+                        <label className="edit-list-input">Weight:</label>
+                        <input
+                            onChange={this.handleChange}
+                            className="edit-weight-input"
                             type="text"
                             value={weight}
-                           name="weight"
+                            name="weight"
                         />
                         <button className="edit-list-button" type="submit">
-                           Save changes
-                        </button>
-
+                            Save changes
+            </button>
                     </div>
                     <button
-                    onClick={this.handleClickCancel()}
-                       className="edit-list-button"
-                       type="button"
-
-                    >{" "}
-                    cancel
-
-                    </button>
-
+                        onClick={this.handleClickCancel}
+                        className="edit-list-button"
+                        type="button"
+                    >
+                        {" "}
+            cancel
+          </button>
                 </form>
-
             </div>
-        )
+        );
     }
 }
 
