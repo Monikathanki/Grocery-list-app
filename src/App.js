@@ -13,14 +13,14 @@ import Features from "./Components/Features/Features";
 import Footer from "./Components/Footer/Footer";
 import Register from "./Components/Register/Register";
 import GroceryList from "./Components/GroceryList/GroceryList";
-//import listData from "./listData";
+import listData from "./listData";
 import Config from "./Config/Config";
 import TokenService from "./services/token-service";
 
 class App extends React.Component {
   state = {
-    categories: [],
-    lists: [],
+    categories: listData.categories,
+    lists: listData.lists,
     user: {
       userName: "",
       user_id: "",

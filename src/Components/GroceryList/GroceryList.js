@@ -3,7 +3,7 @@ import Context from "../../Context/Context";
 import Modal from "../Modal/Modal";
 import { FaCheckCircle } from "react-icons/fa";
 import { Link } from "react-router-dom";
-//import config from '../../Config/Config'
+import config from '../../Config/Config'
 
 class GroceryList extends React.Component {
     static contextType = Context;
